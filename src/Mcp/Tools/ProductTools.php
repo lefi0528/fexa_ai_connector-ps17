@@ -192,6 +192,26 @@ class ProductTools
             'url' => $context->link->getProductLink($product, null, null, null, $idLang),
         ];
 
+        // EAN13/UPC may live on the DEFAULT COMBINATION (variant products: perfume sizes,
+        // clothing, …) rather than the base product. Fall back to it so variant catalogues
+        // aren't reported as "missing barcode" while the storefront shows the gtin.
+        $resolvedEan13 = isset($product->ean13) ? (string) $product->ean13 : '';
+        $resolvedUpc = isset($product->upc) ? (string) $product->upc : '';
+        if ($resolvedEan13 === '' || $resolvedUpc === '') {
+            $defaultCombo = (int) \Product::getDefaultAttribute((int) $product->id);
+            if ($defaultCombo > 0) {
+                $combo = new \Combination($defaultCombo);
+                if (Validate::isLoadedObject($combo)) {
+                    if ($resolvedEan13 === '' && !empty($combo->ean13)) {
+                        $resolvedEan13 = (string) $combo->ean13;
+                    }
+                    if ($resolvedUpc === '' && !empty($combo->upc)) {
+                        $resolvedUpc = (string) $combo->upc;
+                    }
+                }
+            }
+        }
+
         return [
             'id' => $product->id,
             'name' => $product->name,
@@ -215,9 +235,9 @@ class ProductTools
             'price_tax_incl' => $priceTaxIncl,
             'currency' => $currencyIso,
             'on_sale' => (bool)$product->on_sale,
-            'ean13' => isset($product->ean13) ? (string) $product->ean13 : '',
+            'ean13' => $resolvedEan13,
             'isbn' => isset($product->isbn) ? (string) $product->isbn : '',
-            'upc' => isset($product->upc) ? (string) $product->upc : '',
+            'upc' => $resolvedUpc,
             'mpn' => isset($product->mpn) ? (string) $product->mpn : '',
             'condition' => isset($product->condition) ? (string) $product->condition : '',
             'quantity' => $quantity,

@@ -19,6 +19,7 @@ use PrestaShop\Module\FexaAiConnector\Mcp\Tools\ProductTools;
 use PrestaShop\Module\FexaAiConnector\Mcp\Tools\CategoryTools;
 use PrestaShop\Module\FexaAiConnector\Mcp\Tools\CmsTools;
 use PrestaShop\Module\FexaAiConnector\Mcp\Tools\ShopTools;
+use PrestaShop\Module\FexaAiConnector\Mcp\Tools\LlmsTxtTools;
 
 class McpMethodNotFound extends \Exception
 {
@@ -148,6 +149,7 @@ class JsonRpcHandler
         $category = new CategoryTools();
         $cms = new CmsTools();
         $shop = new ShopTools();
+        $llms = new LlmsTxtTools();
 
         return array(
             'list_languages' => array($shop, 'listLanguages'),
@@ -162,6 +164,9 @@ class JsonRpcHandler
             'list_cms' => array($cms, 'listCms'),
             'get_cms_details' => array($cms, 'getCmsDetails'),
             'update_cms_seo' => array($cms, 'updateCmsSeo'),
+            'set_llms_txt' => array($llms, 'setLlmsTxt'),
+            'get_llms_txt' => array($llms, 'getLlmsTxt'),
+            'delete_llms_txt' => array($llms, 'deleteLlmsTxt'),
         );
     }
 
@@ -177,6 +182,15 @@ class JsonRpcHandler
 
         return array(
             $this->tool('list_languages', 'Get list of active languages in the shop.', $schema(array())),
+            $this->tool('set_llms_txt', 'Store the shop /llms.txt markdown, served at the domain root (/llms.txt). Must contain a markdown H1.', $schema(array(
+                'content' => $str, 'id_shop' => $int, 'id_lang' => $int,
+            ), array('content'))),
+            $this->tool('get_llms_txt', 'Read the stored /llms.txt for a shop.', $schema(array(
+                'id_shop' => $int, 'id_lang' => $int,
+            ))),
+            $this->tool('delete_llms_txt', 'Remove the stored /llms.txt for a shop (the route then returns 404).', $schema(array(
+                'id_shop' => $int, 'id_lang' => $int,
+            ))),
             $this->tool('list_products', 'List products with pagination (id, name, meta, url, images).', $schema(array(
                 'langId' => $int, 'limit' => $int, 'offset' => $int, 'onlyActive' => $bool, 'idCategoryId' => $int,
             ))),

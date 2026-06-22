@@ -25,8 +25,11 @@ a hand-rolled JSON-RPC 2.0 handler instead of `php-mcp/server`. A shop installs
 - `controllers/front/McpServer.php` — MCP endpoint (CORS + API-key auth).
 - `src/Mcp/JsonRpcHandler.php` — hand-rolled JSON-RPC dispatcher (`initialize`,
   `ping`, `tools/list`, `tools/call`); unknown tools return `-32601`.
-- `src/Mcp/Tools/*` — Product / Category / CMS / Shop tools (same logic as the
-  flagship, PHP 7.4-compatible).
+- `src/Mcp/Tools/*` — Product / Category / CMS / Shop / **Llms** tools (same logic
+  as the flagship, PHP 7.4-compatible).
+- `controllers/front/llms.php` — serves the AI-readable **`/llms.txt`** at the
+  domain root (new in **v3.6.0**), stored via the `set_llms_txt` tool in
+  Configuration (no extra table). Answers the Lighthouse "Agentic Browsing" audit.
 - `src/Helper/HtmlSanitizer.php` — defense-in-depth content sanitiser.
 
 No Composer dependencies. No `vendor/`.

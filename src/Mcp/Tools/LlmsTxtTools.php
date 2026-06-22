@@ -33,7 +33,7 @@ class LlmsTxtTools
 
     public function setLlmsTxt(string $content, ?int $id_shop = 0, ?int $id_lang = 0): array
     {
-        $content = trim($content);
+        $content = trim($this->maybeDecodeBase64($content));
 
         if ($content === '') {
             throw new \Exception('content is empty');
@@ -72,5 +72,28 @@ class LlmsTxtTools
         Configuration::updateValue(self::KEY, '', true, null, $idShop);
 
         return array('status' => 'deleted', 'id_shop' => (int) $id_shop);
+    }
+
+    /**
+     * Decode a WAF-safe base64 transport. Real llms.txt markdown always contains spaces,
+     * '#' and newlines (none in the base64 alphabet), so a payload that is a single pure
+     * base64 token is the SaaS sending the content encoded to dodge web-application
+     * firewalls (e.g. Atomicorp rule 360151 flags the markdown link syntax "[x](y)" as a
+     * PHP-injection attempt). Plain markdown is returned untouched.
+     *
+     * @param string $content
+     * @return string
+     */
+    private function maybeDecodeBase64($content)
+    {
+        $t = trim((string) $content);
+        if ($t !== '' && preg_match('/^[A-Za-z0-9+\/]+={0,2}$/', $t)) {
+            $decoded = base64_decode($t, true);
+            if ($decoded !== false && $decoded !== '') {
+                return $decoded;
+            }
+        }
+
+        return $content;
     }
 }

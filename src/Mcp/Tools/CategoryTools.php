@@ -1,4 +1,15 @@
 <?php
+/**
+ * Copyright (c) 2025 Fexa AI
+ *
+ * All Rights Reserved.
+ *
+ * This module is proprietary software owned by Fexa AI.
+ *
+ * @author    Fexa AI <support@fexaai.com>
+ * @copyright 2025 Fexa AI
+ * @license   Proprietary
+ */
 
 namespace PrestaShop\Module\FexaAiConnector\Mcp\Tools;
 
@@ -6,15 +17,13 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use Validate;
 use PrestaShop\Module\FexaAiConnector\Helper\HtmlSanitizer;
 
 class CategoryTools
 {
     public function listCategories(?int $langId = null, int $limit = 200, int $offset = 0): array
     {
-        $context = Context::getContext();
+        $context = \Context::getContext();
 
         if (!$context) {
             throw new \Exception('PrestaShop Context not initialized.');
@@ -22,9 +31,9 @@ class CategoryTools
 
         if (!$langId) {
             if (isset($context->language) && isset($context->language->id)) {
-                $langId = (int)$context->language->id;
+                $langId = (int) $context->language->id;
             } else {
-                $langId = (int)\Configuration::get('PS_LANG_DEFAULT');
+                $langId = (int) \Configuration::get('PS_LANG_DEFAULT');
             }
         }
 
@@ -37,11 +46,11 @@ class CategoryTools
                     (SELECT COUNT(*) FROM ' . _DB_PREFIX_ . 'category_product cp WHERE cp.id_category = c.id_category) as product_count
                 FROM ' . _DB_PREFIX_ . 'category c
                 INNER JOIN ' . _DB_PREFIX_ . 'category_lang cl
-                    ON c.id_category = cl.id_category AND cl.id_lang = ' . (int)$langId . '
+                    ON c.id_category = cl.id_category AND cl.id_lang = ' . (int) $langId . '
                 WHERE c.active = 1
                     AND c.level_depth > 1
                 ORDER BY c.level_depth ASC, cl.name ASC
-                LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+                LIMIT ' . (int) $limit . ' OFFSET ' . (int) $offset;
 
         $rows = \Db::getInstance()->executeS($sql);
 
@@ -51,25 +60,25 @@ class CategoryTools
 
         return array_map(function ($c) use ($langId, $context) {
             return [
-                'id'           => (int)$c['id_category'],
-                'name'         => !empty($c['name']) ? $c['name'] : 'Category #' . $c['id_category'],
+                'id' => (int) $c['id_category'],
+                'name' => !empty($c['name']) ? $c['name'] : 'Category #' . $c['id_category'],
                 'link_rewrite' => $c['link_rewrite'] ?? '',
-                'active'       => (bool)$c['active'],
-                'level_depth'  => (int)$c['level_depth'],
-                'productCount' => (int)$c['product_count'],
-                'url'          => $context->link->getCategoryLink((int)$c['id_category'], $c['link_rewrite'] ?? '', $langId),
+                'active' => (bool) $c['active'],
+                'level_depth' => (int) $c['level_depth'],
+                'productCount' => (int) $c['product_count'],
+                'url' => $context->link->getCategoryLink((int) $c['id_category'], $c['link_rewrite'] ?? '', $langId),
             ];
         }, $rows);
     }
 
     public function getCategoryDetails(int $id_category, ?int $id_lang = null): array
     {
-        $context = Context::getContext();
+        $context = \Context::getContext();
         $idLang = $id_lang ?? $context->language->id;
 
         $category = new \Category($id_category, $idLang);
 
-        if (!Validate::isLoadedObject($category)) {
+        if (!\Validate::isLoadedObject($category)) {
             throw new \Exception("Category with ID $id_category not found.");
         }
 
@@ -84,8 +93,8 @@ class CategoryTools
             'active' => $category->active,
             'level_depth' => $category->level_depth,
             'id_parent' => $category->id_parent,
-            'nb_products' => (int)$category->getProducts($idLang, 1, 1, null, null, true),
-            'has_image' => file_exists(_PS_CAT_IMG_DIR_ . (int)$category->id . '.jpg'),
+            'nb_products' => (int) $category->getProducts($idLang, 1, 1, null, null, true),
+            'has_image' => file_exists(_PS_CAT_IMG_DIR_ . (int) $category->id . '.jpg'),
             'breadcrumb' => $this->buildBreadcrumbTrail((int) $category->id, (int) $idLang, $context),
         ];
     }
@@ -99,7 +108,7 @@ class CategoryTools
         $trail = [];
         try {
             $cat = new \Category($idCategory, $idLang);
-            if (!Validate::isLoadedObject($cat)) {
+            if (!\Validate::isLoadedObject($cat)) {
                 return $trail;
             }
             $parents = $cat->getParentsCategories($idLang); // current → … → root
@@ -137,16 +146,16 @@ class CategoryTools
         ?string $meta_title = null,
         ?string $meta_description = null
     ): array {
-        $context = Context::getContext();
-        $id_lang = $id_lang ?? (int)$context->language->id;
+        $context = \Context::getContext();
+        $id_lang = $id_lang ?? (int) $context->language->id;
 
         if (!$id_lang) {
-            $id_lang = (int)\Configuration::get('PS_LANG_DEFAULT');
+            $id_lang = (int) \Configuration::get('PS_LANG_DEFAULT');
         }
 
         $category = new \Category($id_category);
 
-        if (!Validate::isLoadedObject($category)) {
+        if (!\Validate::isLoadedObject($category)) {
             throw new \Exception("Category with ID $id_category not found.");
         }
 
@@ -163,10 +172,18 @@ class CategoryTools
         };
 
         // Defense in depth: clean AI content before it reaches the shop.
-        if ($name !== null) $name = HtmlSanitizer::catalogName($name, 128);
-        if ($description !== null) $description = HtmlSanitizer::richHtml($description);
-        if ($meta_title !== null) $meta_title = HtmlSanitizer::meta($meta_title, 255);
-        if ($meta_description !== null) $meta_description = HtmlSanitizer::meta($meta_description, 512);
+        if ($name !== null) {
+            $name = HtmlSanitizer::catalogName($name, 128);
+        }
+        if ($description !== null) {
+            $description = HtmlSanitizer::richHtml($description);
+        }
+        if ($meta_title !== null) {
+            $meta_title = HtmlSanitizer::meta($meta_title, 255);
+        }
+        if ($meta_description !== null) {
+            $meta_description = HtmlSanitizer::meta($meta_description, 512);
+        }
 
         // URL slug: explicit wins; else derive from the (translated) name. Skip empty.
         $slug = null;

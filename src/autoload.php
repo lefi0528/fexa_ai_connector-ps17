@@ -1,12 +1,15 @@
 <?php
-
 /**
- * Copyright (c) 2025 Fexa AI — All Rights Reserved.
+ * Copyright (c) 2025 Fexa AI
  *
- * Minimal PSR-4 autoloader for the PrestaShop 1.7 / PHP 7.4 build (no Composer).
- * Maps PrestaShop\Module\FexaAiConnector\* to this src/ directory.
+ * All Rights Reserved.
+ *
+ * This module is proprietary software owned by Fexa AI.
+ *
+ * @author    Fexa AI <support@fexaai.com>
+ * @copyright 2025 Fexa AI
+ * @license   Proprietary
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }

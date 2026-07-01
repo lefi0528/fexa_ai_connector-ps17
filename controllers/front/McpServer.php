@@ -1,13 +1,15 @@
 <?php
-
 /**
- * Copyright (c) 2025 Fexa AI — All Rights Reserved.
+ * Copyright (c) 2025 Fexa AI
  *
- * MCP endpoint for the PrestaShop 1.7 / PHP 7.4 build. Same URL, auth and wire
- * protocol as the flagship module, but backed by a hand-rolled JSON-RPC handler
- * instead of php-mcp/server (which requires PHP 8.1).
+ * All Rights Reserved.
+ *
+ * This module is proprietary software owned by Fexa AI.
+ *
+ * @author    Fexa AI <support@fexaai.com>
+ * @copyright 2025 Fexa AI
+ * @license   Proprietary
  */
-
 require_once dirname(dirname(__DIR__)) . '/src/autoload.php';
 
 use PrestaShop\Module\FexaAiConnector\Mcp\JsonRpcHandler;
@@ -38,7 +40,7 @@ class Fexa_ai_connectorMcpServerModuleFrontController extends ModuleFrontControl
         }
 
         // Security: verify API key from header or query string.
-        $storedKey = (string) \Configuration::get('FEXA_AI_API_KEY');
+        $storedKey = (string) Configuration::get('FEXA_AI_API_KEY');
 
         $apiKey = '';
         $authHeader = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : '';
@@ -51,7 +53,7 @@ class Fexa_ai_connectorMcpServerModuleFrontController extends ModuleFrontControl
         if (empty($apiKey)) {
             // Cast to string: Tools::getValue returns false when absent; false to
             // hash_equals() is a fatal TypeError on PHP 7.x/8.x.
-            $apiKey = (string) (\Tools::getValue('token') ?: \Tools::getValue('api_key'));
+            $apiKey = (string) (Tools::getValue('token') ?: Tools::getValue('api_key'));
         }
 
         if (!$storedKey || !hash_equals($storedKey, $apiKey)) {
@@ -61,7 +63,7 @@ class Fexa_ai_connectorMcpServerModuleFrontController extends ModuleFrontControl
             exit;
         }
 
-        $version = isset($this->module->version) ? $this->module->version : '1.0.0';
+        $version = $this->module->version ?: '1.0.0';
         $handler = new JsonRpcHandler($version);
         $handler->handle();
         exit;

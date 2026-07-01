@@ -1,11 +1,14 @@
 <?php
-
 /**
  * Copyright (c) 2025 Fexa AI
  *
  * All Rights Reserved.
  *
  * This module is proprietary software owned by Fexa AI.
+ *
+ * @author    Fexa AI <support@fexaai.com>
+ * @copyright 2025 Fexa AI
+ * @license   Proprietary
  */
 
 namespace PrestaShop\Module\FexaAiConnector\Mcp\Tools;
@@ -27,9 +30,9 @@ use Configuration;
  */
 class LlmsTxtTools
 {
-    const KEY = 'FEXA_AI_LLMS_TXT';
+    public const KEY = 'FEXA_AI_LLMS_TXT';
     // Configuration.value is a TEXT column (~65535 bytes); stay safely under it.
-    const MAX_BYTES = 60000;
+    public const MAX_BYTES = 60000;
 
     public function setLlmsTxt(string $content, ?int $id_shop = 0, ?int $id_lang = 0): array
     {
@@ -51,28 +54,28 @@ class LlmsTxtTools
         // Store base64-encoded. PrestaShop's Configuration sanitises HTML-ish characters
         // ('>' -> '&gt;', '&' -> '&amp;'), which would corrupt the markdown served verbatim
         // at /llms.txt. base64 is opaque to that sanitiser — decoded on read.
-        Configuration::updateValue(self::KEY, base64_encode($content), false, null, $idShop);
+        \Configuration::updateValue(self::KEY, base64_encode($content), false, null, $idShop);
 
-        return array('status' => 'success', 'id_shop' => (int) $id_shop, 'bytes' => strlen($content));
+        return ['status' => 'success', 'id_shop' => (int) $id_shop, 'bytes' => strlen($content)];
     }
 
     public function getLlmsTxt(?int $id_shop = 0, ?int $id_lang = 0): array
     {
         $idShop = ((int) $id_shop) ?: null;
 
-        return array(
+        return [
             'id_shop' => (int) $id_shop,
             'content' => self::readStored($idShop),
-        );
+        ];
     }
 
     public function deleteLlmsTxt(?int $id_shop = 0, ?int $id_lang = 0): array
     {
         $idShop = ((int) $id_shop) ?: null;
         // Empty value → the front controller returns 404.
-        Configuration::updateValue(self::KEY, '', true, null, $idShop);
+        \Configuration::updateValue(self::KEY, '', true, null, $idShop);
 
-        return array('status' => 'deleted', 'id_shop' => (int) $id_shop);
+        return ['status' => 'deleted', 'id_shop' => (int) $id_shop];
     }
 
     /**
@@ -83,6 +86,7 @@ class LlmsTxtTools
      * PHP-injection attempt). Plain markdown is returned untouched.
      *
      * @param string $content
+     *
      * @return string
      */
     private function maybeDecodeBase64($content)
@@ -104,12 +108,13 @@ class LlmsTxtTools
      * upgrade keeps serving the old content until the next push overwrites it.
      *
      * @param int|null $idShop
+     *
      * @return string|null
      */
     public static function readStored($idShop)
     {
-        $raw = Configuration::get(self::KEY, null, null, $idShop);
-        if ($raw === false || $raw === null || $raw === '') {
+        $raw = \Configuration::get(self::KEY, null, null, $idShop);
+        if ('' === (string) $raw) {
             return null;
         }
         $decoded = base64_decode((string) $raw, true);

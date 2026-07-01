@@ -74,15 +74,8 @@ class CmsTools
         ];
     }
 
-    public function updateCmsSeo(
-        int $id_cms,
-        ?int $id_lang = null,
-        ?string $content = null,
-        ?string $meta_title = null,
-        ?string $meta_description = null,
-        ?string $link_rewrite = null,
-        bool $update_slug = true
-    ): array {
+    public function updateCmsSeo(int $id_cms, ?int $id_lang = null, ?string $content = null, ?string $meta_title = null, ?string $meta_description = null, ?string $link_rewrite = null, bool $update_slug = true): array
+    {
         $context = \Context::getContext();
         $id_lang = $id_lang ?? (int) $context->language->id;
 

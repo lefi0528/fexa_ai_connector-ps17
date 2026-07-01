@@ -136,16 +136,8 @@ class CategoryTools
         return $trail;
     }
 
-    public function updateCategorySeo(
-        int $id_category,
-        ?int $id_lang = null,
-        ?string $name = null,
-        ?string $link_rewrite = null,
-        bool $update_slug = true,
-        ?string $description = null,
-        ?string $meta_title = null,
-        ?string $meta_description = null
-    ): array {
+    public function updateCategorySeo(int $id_category, ?int $id_lang = null, ?string $name = null, ?string $link_rewrite = null, bool $update_slug = true, ?string $description = null, ?string $meta_title = null, ?string $meta_description = null): array
+    {
         $context = \Context::getContext();
         $id_lang = $id_lang ?? (int) $context->language->id;
 

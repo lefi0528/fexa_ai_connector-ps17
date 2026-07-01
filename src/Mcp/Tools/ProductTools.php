@@ -293,17 +293,8 @@ class ProductTools
         return $trail;
     }
 
-    public function updateProductSeo(
-        int $id_product,
-        ?int $id_lang = null,
-        ?string $name = null,
-        ?string $link_rewrite = null,
-        bool $update_slug = true,
-        ?string $description_short = null,
-        ?string $description = null,
-        ?string $meta_title = null,
-        ?string $meta_description = null
-    ): array {
+    public function updateProductSeo(int $id_product, ?int $id_lang = null, ?string $name = null, ?string $link_rewrite = null, bool $update_slug = true, ?string $description_short = null, ?string $description = null, ?string $meta_title = null, ?string $meta_description = null): array
+    {
         $context = \Context::getContext();
         $id_lang = $id_lang ?? (int) $context->language->id;
 

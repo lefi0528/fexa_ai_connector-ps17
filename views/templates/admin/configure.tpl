@@ -19,6 +19,23 @@
     <a href="https://fexaai.com" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#fff;color:#059669;padding:16px 32px;border-radius:12px;text-decoration:none;font-weight:700;">🌐 {$fexa_access|escape:'html':'UTF-8'}</a>
   </div>
 </div>
+<div style="background:#fff;border-radius:16px;padding:28px;margin-bottom:24px;border:2px solid #10b981;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+  <h3 style="color:#059669;margin:0 0 12px 0;">🔗 {$fexa_connect_title|escape:'html':'UTF-8'}</h3>
+  {if $fexa_connect_code}
+    <p style="color:#4b5563;margin:0 0 16px 0;line-height:1.6;">{$fexa_connect_code_help|escape:'html':'UTF-8'}</p>
+    <div style="background:#ecfdf5;border:2px dashed #10b981;border-radius:12px;padding:20px;text-align:center;margin-bottom:16px;">
+      <div style="font-family:monospace;font-size:2em;font-weight:800;letter-spacing:.35em;color:#065f46;">{$fexa_connect_code|escape:'html':'UTF-8'}</div>
+    </div>
+    <a href="{$fexa_connect_url|escape:'html':'UTF-8'}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size:1.1em;padding:14px 28px;">🚀 {$fexa_connect_finish|escape:'html':'UTF-8'}</a>
+  {elseif $fexa_connect_error}
+    <div style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;">⚠️ {$fexa_connect_err|escape:'html':'UTF-8'}</div>
+  {else}
+    <p style="color:#4b5563;margin:0 0 16px 0;line-height:1.6;">{$fexa_connect_intro|escape:'html':'UTF-8'}</p>
+    <form method="post" action="">
+      <button type="submit" name="submitFexaConnect" value="1" class="btn btn-primary" style="font-size:1.15em;padding:16px 32px;">🔗 {$fexa_connect_btn|escape:'html':'UTF-8'}</button>
+    </form>
+  {/if}
+</div>
 <div style="background:#fff;border-radius:16px;padding:28px;margin-bottom:24px;border:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(0,0,0,.06);">
   <h3 style="color:#059669;margin:0 0 20px 0;">✨ {$fexa_feat_title|escape:'html':'UTF-8'}</h3>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
@@ -41,7 +58,8 @@
   </div>
 </div>
 <div style="background:#fff;border-radius:16px;padding:28px;margin-bottom:24px;border:2px solid #10b981;box-shadow:0 4px 20px rgba(0,0,0,.08);">
-  <h3 style="color:#059669;margin:0 0 12px 0;">🔑 {$fexa_key_title|escape:'html':'UTF-8'}</h3>
+  <h3 style="color:#059669;margin:0 0 4px 0;">🔑 {$fexa_key_title|escape:'html':'UTF-8'}</h3>
+  <div style="font-size:.85em;color:#9ca3af;margin:0 0 12px 0;">{$fexa_connect_manual_hint|escape:'html':'UTF-8'}</div>
   <p style="color:#4b5563;margin:0 0 16px 0;">{$fexa_key_help|escape:'html':'UTF-8'}</p>
   <input id="fexa-api-key" type="text" readonly value="{$fexa_api_key|escape:'html':'UTF-8'}" onclick="this.select()" style="width:100%;background:#f3f4f6;padding:14px 18px;font-size:1.1em;border-radius:10px;border:1px solid #e5e7eb;font-family:monospace;color:#1f2937;box-sizing:border-box;"/>
   <button type="button" class="btn btn-primary" style="margin-top:16px;" onclick="var e=document.getElementById('fexa-api-key');e.select();document.execCommand('copy');this.innerHTML='✅';">📋 {$fexa_copy|escape:'html':'UTF-8'}</button>

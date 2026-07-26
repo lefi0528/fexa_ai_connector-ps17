@@ -18,7 +18,7 @@ a hand-rolled JSON-RPC 2.0 handler instead of `php-mcp/server`. A shop installs
 
 1. Download `fexa_ai_connector.zip` from the [latest release](../../releases/latest).
 2. PrestaShop back-office → **Modules → Upload a module** → drop the zip.
-3. Open the module, copy your **API key**, and paste it into your Fexa AI dashboard.
+3. Open the module and click **"Connect to Fexa AI"** — copy the short verification code it shows, then enter it on your Fexa AI dashboard to connect in one click. (Or copy your **API key** and paste it manually.)
 
 ## What's inside
 

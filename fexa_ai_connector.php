@@ -27,7 +27,7 @@ class Fexa_ai_connector extends Module
         $this->tab = 'seo';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->version = '3.7.0';
+        $this->version = '3.8.0';
 
         parent::__construct();
 
@@ -123,15 +123,17 @@ class Fexa_ai_connector extends Module
             'fexa_connect_title' => $this->l('Connectez votre boutique en 1 clic'),
             'fexa_connect_intro' => $this->l('Cliquez ci-dessous : Fexa AI vous renverra un code de vérification à saisir sur son site pour finaliser. Aucune clé à copier-coller.'),
             'fexa_connect_btn' => $this->l('Connecter à Fexa AI'),
-            'fexa_connect_code_help' => $this->l('Ouvrez Fexa AI avec le bouton ci-dessous, puis saisissez ce code de vérification pour finaliser la connexion :'),
+            'fexa_connect_code_help' => $this->l('Cliquez sur le bouton bleu ci-dessous : la page Fexa AI s\'ouvre, saisissez-y le code pour finaliser la connexion.'),
             'fexa_connect_finish' => $this->l('Ouvrir Fexa AI pour finaliser'),
-            'fexa_connect_err' => $this->l('La connexion automatique n\'est pas disponible pour le moment. Utilisez votre clé API ci-dessous pour connecter votre boutique manuellement.'),
-            'fexa_connect_manual_hint' => $this->l('Connexion manuelle (avancé)'),
+            'fexa_connect_code_label' => $this->l('Votre code de vérification à 6 caractères (à saisir sur la page Fexa) :'),
+            'fexa_connect_code_warn' => $this->l('Saisissez ce code sur la page Fexa qui s\'ouvre — ne le collez PAS dans le champ « Clé API ».'),
+            'fexa_connect_err' => $this->l('La connexion automatique n\'est pas disponible pour le moment. Utilisez la section « Connexion manuelle » ci-dessous (votre clé API à 64 caractères) pour connecter votre boutique.'),
             'fexa_connect_code' => (isset($fexaConnect['code']) ? (string) $fexaConnect['code'] : ''),
             'fexa_connect_url' => (isset($fexaConnect['claimUrl']) ? (string) $fexaConnect['claimUrl'] : ''),
             'fexa_connect_error' => (isset($fexaConnect['error']) && $fexaConnect['error']),
-            'fexa_key_title' => $this->l('Votre clé API'),
-            'fexa_key_help' => $this->l('Copiez cette clé et collez-la dans votre tableau de bord Fexa AI pour connecter votre boutique.'),
+            'fexa_key_advanced_label' => $this->l('Connexion manuelle (avancé) — clé API à 64 caractères'),
+            'fexa_key_advanced_note' => $this->l('À utiliser seulement si la connexion en 1 clic ne fonctionne pas. La clé ci-dessous fait 64 caractères — ce n\'est PAS le code à 6 caractères.'),
+            'fexa_key_help' => $this->l('Copiez cette clé (64 caractères) et collez-la dans le champ « Clé API » de votre tableau de bord Fexa AI.'),
             'fexa_copy' => $this->l('Copier la clé'),
             'fexa_api_key' => (string) Configuration::get('FEXA_AI_API_KEY'),
         ]);

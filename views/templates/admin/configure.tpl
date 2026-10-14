@@ -16,23 +16,30 @@
       <span style="display:inline-block;background:rgba(255,255,255,.2);padding:4px 12px;border-radius:999px;font-size:.8em;font-weight:700;margin-bottom:12px;">{$fexa_badge|escape:'html':'UTF-8'}</span>
       <p style="font-size:1.1em;opacity:.95;margin:8px 0 0 0;line-height:1.6;">{$fexa_intro|escape:'html':'UTF-8'}</p>
     </div>
-    <a href="https://fexaai.com" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#fff;color:#059669;padding:16px 32px;border-radius:12px;text-decoration:none;font-weight:700;">🌐 {$fexa_access|escape:'html':'UTF-8'}</a>
+    <a href="{$fexa_dashboard_url|escape:'html':'UTF-8'}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#fff;color:#059669;padding:16px 32px;border-radius:12px;text-decoration:none;font-weight:700;">🌐 {$fexa_access|escape:'html':'UTF-8'}</a>
   </div>
 </div>
 <div style="background:#fff;border-radius:16px;padding:28px;margin-bottom:24px;border:3px solid #10b981;box-shadow:0 8px 30px rgba(16,185,129,.18);">
+  {if $fexa_connected}
+    {* Closed loop: Fexa AI authenticated on this shop's MCP endpoint within the last 30 days. *}
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:#dcfce7;color:#065f46;border:1px solid #86efac;border-radius:12px;padding:14px 18px;margin:0 0 18px 0;">
+      <span style="font-weight:700;line-height:1.5;">✅ {$fexa_connected_label|escape:'html':'UTF-8'}</span>
+      <a href="{$fexa_dashboard_url|escape:'html':'UTF-8'}" target="_blank" rel="noopener noreferrer" class="btn btn-success" style="font-weight:700;">📊 {$fexa_dashboard_btn|escape:'html':'UTF-8'}</a>
+    </div>
+  {/if}
   <h3 style="color:#059669;margin:0 0 12px 0;font-size:1.4em;">🔗 {$fexa_connect_title|escape:'html':'UTF-8'}</h3>
   {if $fexa_connect_code}
     <p style="color:#4b5563;margin:0 0 16px 0;line-height:1.6;">{$fexa_connect_code_help|escape:'html':'UTF-8'}</p>
-    {* PRIMARY action: the big button opens Fexa and finalizes. The code below is only typed on that
-       page — it must NOT be pasted into Fexa's API-key field (the #1 connect mistake). *}
+    {* PRIMARY action: the big button opens Fexa AI; the link itself carries the security code, so there is
+       nothing to retype. The code below is only shown so the merchant can compare it on the Fexa page. *}
     <a href="{$fexa_connect_url|escape:'html':'UTF-8'}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:block;text-align:center;font-size:1.35em;font-weight:800;padding:22px;border-radius:12px;">🚀 {$fexa_connect_finish|escape:'html':'UTF-8'}</a>
-    <div style="margin-top:22px;padding-top:18px;border-top:1px dashed #e5e7eb;">
-      <div style="font-size:.85em;color:#6b7280;margin-bottom:8px;">{$fexa_connect_code_label|escape:'html':'UTF-8'}</div>
-      <div style="font-family:monospace;font-size:1.5em;font-weight:700;letter-spacing:.3em;color:#374151;text-align:center;">{$fexa_connect_code|escape:'html':'UTF-8'}</div>
-      <div style="margin-top:12px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:.88em;color:#92400e;">⚠️ {$fexa_connect_code_warn|escape:'html':'UTF-8'}</div>
-    </div>
+    <div style="margin-top:14px;text-align:center;font-size:.85em;color:#6b7280;">{$fexa_connect_code_label|escape:'html':'UTF-8'} <span style="font-family:monospace;font-weight:700;letter-spacing:.15em;color:#374151;">{$fexa_connect_code|escape:'html':'UTF-8'}</span></div>
+    <div style="margin-top:4px;text-align:center;font-size:.8em;color:#6b7280;">{$fexa_connect_code_warn|escape:'html':'UTF-8'}</div>
   {elseif $fexa_connect_error}
-    <div style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;">⚠️ {$fexa_connect_err|escape:'html':'UTF-8'}</div>
+    <div style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;line-height:1.6;">⚠️ {$fexa_connect_err|escape:'html':'UTF-8'}</div>
+    <form method="post" action="" style="margin:16px 0 0 0;">
+      <button type="submit" name="submitFexaConnect" value="1" class="btn btn-primary" style="font-size:1.1em;font-weight:700;padding:14px 28px;">🔄 {$fexa_connect_retry|escape:'html':'UTF-8'}</button>
+    </form>
   {else}
     <p style="color:#4b5563;margin:0 0 16px 0;line-height:1.6;">{$fexa_connect_intro|escape:'html':'UTF-8'}</p>
     <form method="post" action="">
